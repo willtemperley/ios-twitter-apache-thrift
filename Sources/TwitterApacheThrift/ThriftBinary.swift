@@ -16,6 +16,10 @@ class ThriftBinary {
 
     /// The buffer for holding the thrift data
     let readingBuffer: MemoryBuffer
+  
+    var offset: Int {
+      return readingBuffer.offset
+    }
 
     /// Initialize BinaryProtocol class with data
     /// - Parameter data: The thrift data for reading

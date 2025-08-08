@@ -55,6 +55,11 @@ public class ThriftDecoder: Decoder {
 
     /// The specification to be used for decoding
     public var specification: ThriftSpecification = .standard
+  
+    /// Expose the offset in the underlying memory buffer.
+    public var offset: Int? {
+      binary?.offset
+    }
 
     /// Initializes `self` with defaults.
     public init() {}

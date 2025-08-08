@@ -18,7 +18,7 @@ class MemoryBuffer {
     var buffer: Data
 
     /// The offset of read cursor
-    private var offset: Int = 0
+    private(set) var offset: Int = 0
 
     /// Initializes the class with a thrift buffer
     /// - Parameter buffer: The thrift buffer
