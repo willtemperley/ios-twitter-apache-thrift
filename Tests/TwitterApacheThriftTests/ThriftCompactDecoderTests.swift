@@ -22,10 +22,13 @@ class ThriftCompactDecoderTests: XCTestCase {
         super.setUp()
     }
 
-    func testDncodeFoundationTypes() throws {
-        let value = Fixtures.foundationThriftStruct
-        let data = try thriftDecoder.decode(FoundationThriftStruct.self, from: Data(base64Encoded: "EhdYObTIdr7zPxSAAhUuFoqfDBgLc29tZSBzdHJpbmcA")!)
-        XCTAssertEqual(data, value)
+    func testDecodeFoundationTypes2() throws {
+        let expected = Fixtures.foundationThriftStruct
+        let data = Data(base64Encoded: "EhdYObTIdr7zPxSAAhUuFoqfDBgLc29tZSBzdHJpbmcA")!
+        let value = try data.withParserSpan { input in
+            try thriftDecoder.decode(FoundationThriftStruct.self, parsing: &input)
+        }
+        XCTAssertEqual(expected, value)
     }
 
     func testOptionalTypes() throws {

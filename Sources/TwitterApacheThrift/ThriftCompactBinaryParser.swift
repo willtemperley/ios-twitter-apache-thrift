@@ -147,9 +147,9 @@ extension ThriftObject {
 extension Data {
     
     init(parsingLV input: inout ParserSpan) throws {
-        let len = try Int(parsingLEB128: &input)
-        let bytes: [UInt8] = try .init(parsing: &input, byteCount: len)
-        self =  Data(bytes)
+        let len = try UInt32(parsingLEB128: &input)
+        let bytes: [UInt8] = try .init(parsing: &input, byteCount: Int(len))
+        self = Data(bytes)
     }
     
     init(unsignedLEBBytes input: inout ParserSpan) throws  {
