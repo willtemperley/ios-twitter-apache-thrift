@@ -50,26 +50,20 @@ public class ThriftDecoder: Decoder {
 
     public var userInfo: [CodingUserInfoKey : Any] = [:]
 
-    fileprivate var binary: ThriftBinary?
+    fileprivate var binary: ThriftCompactBinaryParser
     fileprivate var value: ThriftObject?
 
     /// The specification to be used for decoding
-    public var specification: ThriftSpecification = .standard
   
-    /// Expose the offset in the underlying memory buffer.
-    public var offset: Int? {
-      binary?.offset
+    /// Initializes `self` with defaults.
+    public init() {
+        self.binary = ThriftCompactBinaryParser()
     }
 
-    /// Initializes `self` with defaults.
-    public init() {}
-
-    /// Initializes `self` with defaults.
-    fileprivate init(value: ThriftObject, specification: ThriftSpecification) {
+    fileprivate convenience init(value: ThriftObject) {
+        self.init()
         self.value = value
-        self.specification = specification
     }
-
 
     /// Decodes a top-level value of the given type from the given Thrift representation.
     ///
@@ -78,9 +72,11 @@ public class ThriftDecoder: Decoder {
     /// - returns: A value of the requested type.
     /// - throws: An `ThriftDecoderError` if any value throws an error during decoding.
     public func decode<T>(_ type: T.Type, from data: Data) throws -> T where T : ThriftDecodable {
-        self.binary = specification == .compact ? ThriftCompactBinary(data: data) : ThriftBinary(data: data)
+        self.binary = ThriftCompactBinaryParser()
         let thriftType = try ThriftType.decodableType(from: type.self)
-        self.value = try binary?.readThrift(type: thriftType)
+        try data.withParserSpan { span in
+            self.value = try binary.readThrift(type: thriftType, parsing: &span)
+        }
         return try type.init(fromThrift: self)
     }
 
@@ -247,9 +243,10 @@ extension ThriftDecoder {
     private func decodeType<T: Decodable>(type: T.Type, value: ThriftObject) throws -> T {
         let decoded: T?
         if let thriftDecodable = type as? ThriftDecodable.Type {
-            decoded = try thriftDecodable.init(fromThrift: ThriftDecoder(value: value, specification: self.specification)) as? T
+//            fatalError()
+            decoded = try thriftDecodable.init(fromThrift: ThriftDecoder(value: value)) as? T
         } else if case .data(let data) = value {
-            let binary = self.specification == .compact ? ThriftCompactBinary(data: data) : ThriftBinary(data: data)
+            let binary = ThriftCompactBinary(data: data)
             switch type {
             case is Bool.Type:
                 decoded = try binary.readBool() as? T

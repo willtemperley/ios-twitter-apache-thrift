@@ -34,22 +34,22 @@ extension CollectiontThriftStruct {
 }
 
 enum Fixtures {
-    static var foundationThriftStruct = FoundationThriftStruct(boolValue: false,
+    nonisolated(unsafe) static var foundationThriftStruct = FoundationThriftStruct(boolValue: false,
                                                                doubleValue: 1.234,
                                                                int16Value: 128,
                                                                int32Value: 23,
                                                                int64Value: 100293,
                                                                stringValue: "some string")
 
-    static var optionalThriftStruct =  OptionalThriftStruct(int16Value: 12, someBool: true)
+    nonisolated(unsafe) static var optionalThriftStruct =  OptionalThriftStruct(int16Value: 12, someBool: true)
 
-    static var subobjectThriftStruct = SubobjectThriftStruct(value: Fixtures.optionalThriftStruct, intValue: 50)
+    nonisolated(unsafe) static var subobjectThriftStruct = SubobjectThriftStruct(value: Fixtures.optionalThriftStruct, intValue: 50)
 
-    static var collectionThriftStruct = CollectiontThriftStruct(arrays: [1.1, 2.2],
+    nonisolated(unsafe) static var collectionThriftStruct = CollectiontThriftStruct(arrays: [1.1, 2.2],
                                                                 maps: ["a": "asdf"],
                                                                 sets: [1])
 
-    static var dataStruct = DataStruct(data: Data("test".utf8), byte: 5)
+    nonisolated(unsafe) static var dataStruct = DataStruct(data: Data("test".utf8), byte: 5)
 }
 
 struct UncodableStruct: ThriftCodable {

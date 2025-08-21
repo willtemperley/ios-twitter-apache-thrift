@@ -19,11 +19,10 @@ class ThriftCompactDecoderTests: XCTestCase {
 
     override func setUp() {
         self.thriftDecoder = ThriftDecoder()
-        thriftDecoder.specification = .compact
         super.setUp()
     }
 
-    func testEncodeFoundationTypes() throws {
+    func testDncodeFoundationTypes() throws {
         let value = Fixtures.foundationThriftStruct
         let data = try thriftDecoder.decode(FoundationThriftStruct.self, from: Data(base64Encoded: "EhdYObTIdr7zPxSAAhUuFoqfDBgLc29tZSBzdHJpbmcA")!)
         XCTAssertEqual(data, value)

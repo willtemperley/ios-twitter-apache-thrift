@@ -1,4 +1,4 @@
-// swift-tools-version:5.5
+// swift-tools-version:6.2
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 //
 // Copyright 2020 Twitter, Inc.
@@ -10,8 +10,7 @@ import PackageDescription
 let package = Package(
     name: "TwitterApacheThrift",
     platforms: [
-        .iOS("13.4"),
-        .macOS("10.15.4")
+        .macOS("15.0")
     ],
     products: [
         .library(
@@ -22,11 +21,18 @@ let package = Package(
             ]
         )
     ],
-    dependencies: [],
+    dependencies: [
+      .package(
+          url: "https://github.com/willtemperley/swift-binary-parsing.git",
+          branch: "main"
+      ),
+    ],
     targets: [
         .target(
             name: "TwitterApacheThrift",
-            dependencies: []
+            dependencies: [
+              .product(name: "BinaryParsing", package: "swift-binary-parsing"),
+            ]
         ),
         .testTarget(
             name: "TwitterApacheThriftTests",
