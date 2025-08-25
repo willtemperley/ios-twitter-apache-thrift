@@ -44,6 +44,7 @@ extension ThriftStruct {
         let fieldType = UInt8(binary & 0x0F)
         let type = try ThriftType(compactValue: fieldType)
         
+//        print("previousId: \(previousId), fieldIdDelta: \(fieldIdDelta), type: \(type)")
         if fieldIdDelta == 0 {
             let val = try Int16(parsingLittleEndian: &input)
             let fieldId = Int(Int16(zigZag: val))
@@ -114,9 +115,7 @@ extension ThriftObject {
         }
         
         var span = try input.seeking(toRelativeOffset: binary)
-        //      let sizeBytes = try unsignedLEBBytes(startingByte: binary)
-        //      let size: Int32 = decodeUnsignedLEB(from: sizeBytes)
-        let size = try Int32(parsingLEB128: &span)
+        let size = try UInt32(parsingLEB128: &span)
         
         let types = try UInt8(parsing: &input)
         let keyType = UInt8(types >> 4) & 0x0F
@@ -136,8 +135,8 @@ extension ThriftObject {
         
         //If size is 15 (1111) then it uses a different format
         if compactSize == 0b1111 {
-            let size: Int = try .init(parsingLEB128: &input)
-            return (type, size)
+            let size: UInt = try .init(parsingLEB128: &input)
+            return (type, Int(size))
         }
         
         return (type, Int(compactSize))
@@ -167,7 +166,7 @@ extension Data {
 }
 
 /// A class for reading values from thrift data
-class ThriftCompactBinaryParser {
+struct ThriftCompactBinaryParser {
     
     func readThrift(type: ThriftType, parsing input: inout ParserSpan) throws -> ThriftObject {
         return try readValue(parsing: &input, index: nil, type: type)

@@ -54,3 +54,4 @@ public protocol ThriftDecodable: Decodable {
     /// - Parameter decoder: The decoder to read data from.
     init(fromThrift decoder: ThriftDecoder) throws
 }
+

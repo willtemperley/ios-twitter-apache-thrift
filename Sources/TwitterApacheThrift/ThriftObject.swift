@@ -13,6 +13,7 @@ import Foundation
 
 indirect enum ThriftObject: Hashable {
     case data(Data)
+    case int(Int)
     case unkeyedCollection(ThriftUnkeyedCollection)
     case keyedCollection(ThriftKeyedCollection)
     case `struct`(ThriftStruct)
