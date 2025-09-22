@@ -25,6 +25,9 @@ class ThriftDecoderTests: XCTestCase {
     func testEncodeFoundationTypes() throws {
         let value = Fixtures.foundationThriftStruct
         let data = try thriftDecoder.decode(FoundationThriftStruct.self, from: Data(base64Encoded: "AgABAAQAAj/zvnbItDlYBgADAIAIAAQAAAAXCgAFAAAAAAABh8ULAAYAAAALc29tZSBzdHJpbmcA")!)
+        
+        print(data)
+        
         XCTAssertEqual(data, value)
     }
 
