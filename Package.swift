@@ -24,8 +24,8 @@ let package = Package(
     dependencies: [
       .package(url: "https://github.com/apple/swift-syntax", exact: "602.0.0"),
       .package(
-          url: "https://github.com/willtemperley/swift-binary-parsing.git",
-          branch: "swift-syntax-602"
+          url: "https://github.com/apple/swift-binary-parsing.git",
+          branch: "main"
       ),
     ],
     targets: [
