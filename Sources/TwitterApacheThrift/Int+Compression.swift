@@ -18,10 +18,10 @@ extension Int16 {
 }
 extension Int {
     var zigZag: Int {
-        if self.bitWidth > 32 {
+//        if self.bitWidth > 32 {
             return Int((Int64(self) << 1) ^ (Int64(self) >> 63))
-        }
-        return (self << 1) ^ (self >> 31)
+//        }
+//        return (self << 1) ^ (self >> 31)
     }
     init(zigZag value: Int64) {
         self = Int((value >> 1) ^ -(value & 1))

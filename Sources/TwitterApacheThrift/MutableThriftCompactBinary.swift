@@ -28,8 +28,8 @@ class MutableThriftCompactBinary: MutableThriftBinary {
 
     override func write(_ value: Double) {
         var bits = CFSwapInt64HostToLittle(value.bitPattern)
-        let buffer = withUnsafePointer(to: &bits) {
-            return Data(bytes: UnsafePointer<UInt8>(OpaquePointer($0)), count: MemoryLayout<UInt64>.size)
+        let buffer = unsafe withUnsafePointer(to: &bits) {
+            return unsafe Data(bytes: UnsafePointer<UInt8>(OpaquePointer($0)), count: MemoryLayout<UInt64>.size)
         }
         insert(data: buffer)
     }

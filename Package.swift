@@ -22,7 +22,7 @@ let package = Package(
         )
     ],
     dependencies: [
-      .package(url: "https://github.com/apple/swift-syntax", exact: "602.0.0"),
+//      .package(url: "https://github.com/apple/swift-syntax", exact: "602.0.0"),
       .package(
           url: "https://github.com/apple/swift-binary-parsing.git",
           branch: "main"
@@ -33,6 +33,11 @@ let package = Package(
             name: "TwitterApacheThrift",
             dependencies: [
               .product(name: "BinaryParsing", package: "swift-binary-parsing"),
+            ],
+            swiftSettings: [
+              .enableExperimentalFeature("ValueGenerics"),
+              .enableExperimentalFeature("Lifetimes"),
+              .strictMemorySafety(),
             ]
         ),
         .testTarget(

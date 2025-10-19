@@ -22,7 +22,7 @@ class ThriftCompactDecoderTests: XCTestCase {
         super.setUp()
     }
 
-    func testDecodeFoundationTypes2() throws {
+    func testDecodeFoundationTypes() throws {
         let expected = Fixtures.foundationThriftStruct
         let data = Data(base64Encoded: "EhdYObTIdr7zPxSAAhUuFoqfDBgLc29tZSBzdHJpbmcA")!
         let value = try data.withParserSpan { input in

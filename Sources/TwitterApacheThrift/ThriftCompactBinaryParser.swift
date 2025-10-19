@@ -20,6 +20,7 @@ import BinaryParsing
 
 extension ThriftStruct {
     
+    @_lifetime(&input)
     init(parsing input: inout ParserSpan, index: Int?) throws {
         
         var fields: [Int: ThriftValue] = [:]
