@@ -32,7 +32,7 @@ public enum ThriftDecoderError: Error {
     /// CodingKey is missing the value
     case codingKeyMissingIntValue(key: CodingKey)
     /// The type is not encodable, example not conforming to ThriftDecodable
-    case undecodableType(type: Any)
+    case undecodableType(type: Any.Type)
     /// The string found while decoding is not UTF8 formatted, possibly because
     /// of malformed thrift or an encoding error.
     case nonUTF8StringData(Data)

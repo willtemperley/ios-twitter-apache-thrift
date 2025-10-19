@@ -20,7 +20,7 @@ public enum SomeEnum: Int32, ThriftCodable, Equatable {
     var container = try decoder.unkeyedContainer()
     let value = try container.decode(Int32.self)
     guard let enumValue = SomeEnum(rawValue: value) else {
-      throw ThriftDecoderError.undecodableType(type: value.self)
+        throw ThriftDecoderError.undecodableType(type: type(of: value.self))
     }
     self = enumValue
   }

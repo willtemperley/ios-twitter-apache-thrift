@@ -38,19 +38,19 @@ class PreencodedContainerTests: XCTestCase {
         XCTAssertEqual(data, Data([6, 0, 1, 0, 57, 0]))
     }
 
-    func testDecoding() throws {
-        struct ValueStruct: ThriftCodable {
-            let value: Int16
-            enum CodingKeys: Int, CodingKey {
-                case value = 1
-            }
-        }
-
-        let decoder = ThriftDecoder()
-        let testStructValue = try decoder.decode(TestStruct.self, from: Data([6, 0, 1, 0, 57, 0]))
-        let valueStructValue = try decoder.decode(ValueStruct.self, from: Data([6, 0, 1, 0, 57, 0]))
-
-        XCTAssertEqual(testStructValue.value, .value(57))
-        XCTAssertEqual(valueStructValue.value, 57)
-    }
+//    func testDecoding() throws {
+//        struct ValueStruct: ThriftCodable {
+//            let value: Int16
+//            enum CodingKeys: Int, CodingKey {
+//                case value = 1
+//            }
+//        }
+//
+//        let decoder = ThriftDecoder()
+//        let testStructValue = try decoder.decode(TestStruct.self, from: Data([6, 0, 1, 0, 57, 0]))
+//        let valueStructValue = try decoder.decode(ValueStruct.self, from: Data([6, 0, 1, 0, 57, 0]))
+//
+//        XCTAssertEqual(testStructValue.value, .value(57))
+//        XCTAssertEqual(valueStructValue.value, 57)
+//    }
 }

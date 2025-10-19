@@ -44,16 +44,13 @@ extension ThriftStruct {
         let fieldType = UInt8(binary & 0x0F)
         let type = try ThriftType(compactValue: fieldType)
         
-//        print("previousId: \(previousId), fieldIdDelta: \(fieldIdDelta), type: \(type)")
         if fieldIdDelta == 0 {
             let val = try Int16(parsingLittleEndian: &input)
             let fieldId = Int(Int16(zigZag: val))
             return (type, fieldId)
         }
-        
         return (type, Int(fieldIdDelta) + previousId)
     }
-    
 }
 
 extension ThriftObject {

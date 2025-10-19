@@ -31,9 +31,9 @@ public enum ThriftEncoderError: Error {
     /// CodingKey is missing the value
     case codingKeyMissingIntValue(key: CodingKey)
     /// The type is not encodable, example not conforming to ThriftEncodable
-    case unencodableType(type: Any)
+    case unencodableType(type: Any.Type)
     /// The validate method returned an error
-    case validationFailure(type: Any)
+    case validationFailure(type: Any.Type)
 }
 
 ///An object that encodes instances of a data type to Thrift objects.
@@ -195,7 +195,7 @@ extension ThriftEncoder {
         case let v as ThriftEncodable:
             try v.thriftEncode(to: ThriftEncoder(binary: self.binary, specification: self.specification))
         default:
-            throw ThriftEncoderError.unencodableType(type: value.self)
+            throw ThriftEncoderError.unencodableType(type: type(of: value.self))
         }
     }
 }
