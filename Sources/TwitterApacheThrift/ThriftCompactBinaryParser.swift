@@ -12,8 +12,6 @@
 ///
 // -----------------------------------------------------------------------------
 
-
-
 import CoreFoundation
 import Foundation
 import BinaryParsing
@@ -21,6 +19,7 @@ import BinaryParsing
 extension ThriftStruct {
     
     @_lifetime(&input)
+    @inlinable
     init(parsing input: inout ParserSpan, index: Int?) throws {
         
         var fields: [Int: ThriftValue] = [:]
@@ -36,6 +35,8 @@ extension ThriftStruct {
     /// Reads a the field metadata from the thrift. This type is equivalent to a Dictionary
     /// - Throws: ThriftDecoderError.readBufferOverflow when trying to read outside the range of data
     /// - Returns: The field thrift type. The thrift id if it is not a ThriftType.stop.
+    @_lifetime(&input)
+    @inlinable
     static func readFieldMetadata(previousId: Int, parsing input: inout ParserSpan) throws -> (type: ThriftType, id: Int?) {
         let binary = try UInt8(parsing: &input)
         if binary == 0 {
@@ -56,6 +57,8 @@ extension ThriftStruct {
 
 extension ThriftObject {
     
+    @_lifetime(&input)
+    @inlinable
     init(parsing input: inout ParserSpan, index: Int?, type: ThriftType, isCollection: Bool = false) throws {
         
         switch type {
@@ -77,8 +80,6 @@ extension ThriftObject {
             var values: [ThriftKeyedCollection.Value] = []
             let metadata = try ThriftObject.readMapMetadata(parsing: &input)
             for _ in 0..<metadata.size {
-                //            let key = try readValue(index: nil, type: metadata.keyType, isCollection: true)
-                //            let value = try readValue(index: nil, type: metadata.valueType, isCollection: true)
                 let key = try Self(parsing: &input, index: nil, type: metadata.keyType, isCollection: true)
                 let value = try Self(parsing: &input, index: nil, type: metadata.valueType, isCollection: true)
                 values.append(.init(key: key, value: value))
@@ -99,12 +100,13 @@ extension ThriftObject {
         default:
             self = .stop
         }
-        
     }
     
     /// Reads a map object metadata from the thrift. This type is equivalent to a Dictionary
     /// - Throws: ThriftDecoderError.readBufferOverflow when trying to read outside the range of data
     /// - Returns: The type of key as a thrift type. The type of values as a thrift type. The amount of elements.
+    @_lifetime(&input)
+    @inlinable
     static func readMapMetadata(parsing input: inout ParserSpan) throws -> (keyType: ThriftType, valueType: ThriftType, size: Int) {
         let binary = try UInt8(parsing: &input)
         if binary == 0 {
@@ -125,6 +127,8 @@ extension ThriftObject {
     /// Reads a list object metadata from the thrift. This type is equivalent to a Array
     /// - Throws: ThriftDecoderError.readBufferOverflow when trying to read outside the range of data
     /// - Returns: The type of values as a thrift type. The amount of elements.
+    @_lifetime(&input)
+    @inlinable
     static func readListMetadata(parsing input: inout ParserSpan) throws -> (elementType: ThriftType, size: Int) {
         let binary = try UInt8(parsing: &input)
         let compactSize = UInt8(binary >> 4) & 0x0F
@@ -143,17 +147,20 @@ extension ThriftObject {
 
 extension Data {
     
+    @_lifetime(&input)
+    @inlinable
     init(parsingLV input: inout ParserSpan) throws {
         let len = try UInt32(parsingLEB128: &input)
         let bytes: [UInt8] = try .init(parsing: &input, byteCount: Int(len))
         self = Data(bytes)
     }
     
+    @_lifetime(&input)
+    @inlinable
     init(unsignedLEBBytes input: inout ParserSpan) throws  {
         var bytes: [UInt8] = []
         while true {
             let byte = try UInt8(parsing: &input)
-            
             bytes.append(byte)
             if (byte & 0x80) == 0 {
                 break
@@ -166,14 +173,20 @@ extension Data {
 /// A class for reading values from thrift data
 struct ThriftCompactBinaryParser {
     
+    @_lifetime(&input)
+    @inlinable
     func readThrift(type: ThriftType, parsing input: inout ParserSpan) throws -> ThriftObject {
         return try readValue(parsing: &input, index: nil, type: type)
     }
     
+    @_lifetime(&input)
+    @inlinable
     func readStruct(parsing input: inout ParserSpan, index: Int?) throws -> ThriftStruct {
         return try ThriftStruct(parsing: &input, index: index)
     }
     
+    @_lifetime(&input)
+    @inlinable
     func readValue(parsing input: inout ParserSpan, index: Int?, type: ThriftType, isCollection: Bool = false) throws -> ThriftObject {
         return try .init(parsing: &input, index: index, type: type, isCollection: isCollection)
     }
