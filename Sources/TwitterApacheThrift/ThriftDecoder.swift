@@ -267,6 +267,8 @@ extension ThriftDecoder {
                 decoded = data as? T
             case is Double.Type:
                 decoded = try binary.readDouble() as? T
+            case is Int8.Type:
+                decoded = Int8(try binary.readByte()) as? T
             case is UInt8.Type:
                 decoded = try binary.readByte() as? T
             case is Int16.Type:
@@ -275,6 +277,8 @@ extension ThriftDecoder {
                 decoded = try binary.readInt32() as? T
             case is Int64.Type:
                 decoded = try binary.readInt64() as? T
+            case is UInt64.Type:
+                decoded = try binary.readUInt64() as? T
             case is String.Type:
                 guard let string = String(bytes: data, encoding: .utf8) else {
                     throw ThriftDecoderError.nonUTF8StringData(data)
