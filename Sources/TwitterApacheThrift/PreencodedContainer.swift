@@ -25,7 +25,7 @@ import Foundation
 ///         let value: Int16
 ///     }
 ///
-public enum PreencodedContainer<T: Codable> {
+public enum PreencodedContainer<T: Codable & Sendable>: Sendable {
     /// Preencoded data
     case encodedData(Data)
     /// A value that needs to be encoded/decoded

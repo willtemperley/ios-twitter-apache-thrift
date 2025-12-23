@@ -3,7 +3,7 @@
 // http://www.apache.org/licenses/LICENSE-2.0
 
 /// A convenient shortcut for indicating something is both encodable and decodable.
-public typealias ThriftCodable = ThriftDecodable & ThriftEncodable
+public typealias ThriftCodable = ThriftDecodable & ThriftEncodable & Sendable
 
 /// A protocol for types which can be encoded from thrift.
 public protocol ThriftEncodable: Encodable {
